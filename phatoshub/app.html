@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhatosHub | Painel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="demo-banner">
+    Modo demonstração: os dados são fictícios e ficam salvos só no seu navegador.
+    <button id="resetDemo" class="link-btn">Restaurar dados</button>
+  </div>
+
+  <div class="layout">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <a href="index.html" class="logo">
+        <span class="logo__mark">P</span>
+        <span class="logo__text">Phatos<strong>Hub</strong></span>
+      </a>
+      <nav class="menu" aria-label="Módulos">
+        <button class="menu__item is-active" data-view="dashboard"><span>▦</span>Dashboard</button>
+        <button class="menu__item" data-view="funil"><span>◎</span>Funil de vendas</button>
+        <button class="menu__item" data-view="clientes"><span>☰</span>Clientes e contratos</button>
+        <button class="menu__item" data-view="equipe"><span>★</span>Equipe e metas</button>
+        <button class="menu__item" data-view="financeiro"><span>$</span>Financeiro e comissões</button>
+        <button class="menu__item" data-view="ia"><span>✦</span>Assistente IA</button>
+      </nav>
+      <div class="sidebar__user">
+        <span class="avatar">GC</span>
+        <div><b>Gestora da corretora</b><small>Perfil administrador</small></div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+        <h1 id="viewTitle">Dashboard</h1>
+        <div class="topbar__actions">
+          <input type="search" id="globalSearch" placeholder="Buscar lead ou cliente…" aria-label="Buscar">
+          <button class="btn btn--primary" id="newLeadBtn">+ Novo lead</button>
+        </div>
+      </header>
+
+      <!-- ===== DASHBOARD ===== -->
+      <section class="view is-active" id="view-dashboard">
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card__head"><h2>Vidas implantadas por mês</h2><small>últimos 6 meses</small></div>
+            <div class="chart" id="chartVidas"></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h2>Funil de conversão</h2><small>leads em cada etapa</small></div>
+            <div id="funnelChart" class="hbars"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card__head"><h2>Ranking de corretores</h2><small>vidas no mês</small></div>
+            <ol class="ranking" id="ranking"></ol>
+          </div>
+          <div class="card card--ai">
+            <div class="card__head"><h2>✦ Insights da IA</h2><small>atualizado agora</small></div>
+            <ul class="insights" id="insights"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FUNIL ===== -->
+      <section class="view" id="view-funil">
+        <div class="toolbar">
+          <select id="filterCorretor" aria-label="Filtrar por corretor"></select>
+          <select id="filterTipo" aria-label="Filtrar por tipo">
+            <option value="">Todos os tipos</option>
+            <option>PF</option><option>PME</option><option>Adesão</option><option>Empresarial</option>
+          </select>
+          <p class="hint">Arraste os cartões entre as etapas. Ao mover para <b>Implantado</b>, o contrato e as comissões são gerados automaticamente.</p>
+        </div>
+        <div class="kanban" id="kanban"></div>
+      </section>
+
+      <!-- ===== CLIENTES ===== -->
+      <section class="view" id="view-clientes">
+        <div class="toolbar">
+          <select id="filterStatus" aria-label="Filtrar por status">
+            <option value="">Todos os status</option>
+            <option value="ativo">Ativos</option>
+            <option value="cancelado">Cancelados</option>
+          </select>
+          <select id="filterOperadora" aria-label="Filtrar por operadora"></select>
+        </div>
+        <div class="card card--flush">
+          <div class="table-wrap">
+            <table class="table" id="contratosTable">
+              <thead><tr><th>Cliente</th><th>Tipo</th><th>Operadora</th><th>Vidas</th><th>Mensalidade</th><th>Vigência</th><th>Corretor</th><th>Status</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== EQUIPE ===== -->
+      <section class="view" id="view-equipe">
+        <div class="team" id="team"></div>
+      </section>
+
+      <!-- ===== FINANCEIRO ===== -->
+      <section class="view" id="view-financeiro">
+        <div class="toolbar">
+          <label class="inline">Competência <select id="competencia"></select></label>
+          <button class="btn btn--ghost" id="exportCsv">⬇ Exportar CSV</button>
+        </div>
+        <div class="kpis" id="finKpis"></div>
+
+        <div class="card">
+          <div class="card__head"><h2>Repasse por corretor</h2><small>clique em "Pagar" para registrar o repasse</small></div>
+          <div class="table-wrap">
+            <table class="table" id="repasseTable">
+              <thead><tr><th>Corretor</th><th>Repasse</th><th>Lançamentos</th><th>Valor bruto</th><th>Estornos</th><th>A pagar</th><th>Status</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head"><h2>Lançamentos da competência</h2><small>gerados a partir da grade de comissão</small></div>
+          <div class="table-wrap">
+            <table class="table" id="lancTable">
+              <thead><tr><th>Contrato</th><th>Operadora</th><th>Tipo</th><th>Recebido da operadora</th><th>Corretor</th><th>Repasse</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head"><h2>Grade de comissão por operadora</h2><small>edite os valores para recalcular</small></div>
+          <div class="table-wrap">
+            <table class="table" id="gradeTable">
+              <thead><tr><th>Operadora</th><th>Agenciamento (% da mensalidade)</th><th>Parcelas</th><th>Vitalício (% ao mês)</th><th>Estorno se cancelar até (meses)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== IA ===== -->
+      <section class="view" id="view-ia">
+        <div class="ai">
+          <div class="ai__chat card">
+            <div class="ai__messages" id="aiMessages" aria-live="polite"></div>
+            <form class="ai__form" id="aiForm">
+              <input type="text" id="aiInput" placeholder="Pergunte algo à assistente…" autocomplete="off" aria-label="Mensagem para a IA">
+              <button class="btn btn--primary" type="submit">Enviar</button>
+            </form>
+          </div>
+          <aside class="ai__side">
+            <div class="card">
+              <h2 class="small-title">Sugestões</h2>
+              <div class="chips" id="aiChips">
+                <button>Quais leads devo priorizar hoje?</button>
+                <button>Resumo do mês</button>
+                <button>Quanto vou pagar de comissão?</button>
+                <button>Sugira um plano para família de 4 pessoas em SP</button>
+                <button>Quais contratos fazem aniversário em breve?</button>
+                <button>Previsão de faturamento</button>
+              </div>
+            </div>
+            <div class="card">
+              <h2 class="small-title">Lead scoring</h2>
+              <ol class="ranking ranking--score" id="scoreList"></ol>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ===== MODAIS ===== -->
+  <dialog id="leadModal" class="modal">
+    <form method="dialog" id="leadFormModal" class="modal__body">
+      <h2>Novo lead</h2>
+      <div class="form-grid">
+        <label>Nome / empresa<input name="nome" required></label>
+        <label>Telefone<input name="telefone" required placeholder="(11) 99999-9999"></label>
+        <label>Tipo
+          <select name="tipo"><option>PF</option><option>PME</option><option>Adesão</option><option>Empresarial</option></select>
+        </label>
+        <label>Nº de vidas<input name="vidas" type="number" min="1" value="1" required></label>
+        <label>Mensalidade estimada (R$)<input name="valor" type="number" min="0" step="10" value="800" required></label>
+        <label>Origem
+          <select name="origem"><option>WhatsApp</option><option>Instagram</option><option>Site</option><option>Indicação</option><option>Google</option></select>
+        </label>
+        <label>Cidade<input name="cidade" value="São Paulo"></label>
+        <label>Corretor responsável<select name="corretor" id="leadCorretor"></select></label>
+      </div>
+      <div class="modal__actions">
+        <button value="cancel" formnovalidate class="btn btn--ghost">Cancelar</button>
+        <button value="ok" class="btn btn--primary">Salvar lead</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="detailModal" class="modal">
+    <div class="modal__body" id="detailBody"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
